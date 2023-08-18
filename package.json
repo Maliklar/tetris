@@ -1,0 +1,22 @@
+{
+  "scripts": {
+    "dev": "tsc ./src/index.ts",
+    "build": "webpack",
+    "develop": "webpack-dev-server --mode development"
+  },
+  "dependencies": {
+    "html-webpack-plugin": "^5.5.0",
+    "mini-css-extract-plugin": "^2.6.1",
+    "nodemon": "^3.0.1",
+    "ts-loader": "^9.4.4",
+    "tsc": "^2.0.4",
+    "typescript": "^5.1.6",
+    "webpack": "^5.88.2",
+    "webpack-dev-server": "^4.15.1"
+  },
+  "devDependencies": {
+    "css-loader": "^6.8.1",
+    "style-loader": "^3.3.3",
+    "webpack-cli": "^5.1.4"
+  }
+}

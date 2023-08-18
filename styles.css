@@ -1,0 +1,29 @@
+body {
+  background-color: black;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.container {
+  position: relative;
+  border: 1px solid white;
+  display: flex;
+  flex-direction: column;
+}
+
+.row {
+  position: relative;
+  display: flex;
+}
+
+.ceil {
+  position: relative;
+  height: 30px;
+  width: 30px;
+  border: 1px solid white;
+}
+
+.ceil[data-active="true"] {
+  background-color: red;
+}
