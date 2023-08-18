@@ -21,7 +21,17 @@ grid.updateCeils();
 // grid.shape.shiftBottom();
 
 function start() {
-  let shape = new Shape(SHAPE);
+  addEventListener("keydown", (e) => {
+    if (e.key === "ArrowRight") {
+      grid.shiftRight();
+    }
+    if (e.key === "ArrowLeft") {
+      grid.shiftLeft();
+    }
+  });
+  setInterval(() => {
+    grid.shiftBottom();
+  }, 100);
 }
 
 start();

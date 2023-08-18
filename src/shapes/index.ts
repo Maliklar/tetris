@@ -34,13 +34,13 @@ export default class Shape {
     return this.shape[row - this.start.row][col - this.start.col];
   }
 
-  shitRight() {
-    this.start.col = this.start.col + 1;
-    this.end.col = this.end.col + 1;
+  shiftRight() {
+    this.start.col++;
+    this.end.col++;
   }
   shiftLeft() {
-    this.start.col = this.start.col - 1;
-    this.end.col = this.end.col - 1;
+    this.start.col--;
+    this.end.col--;
   }
   shiftBottom() {
     this.start.row++;

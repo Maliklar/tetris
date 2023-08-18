@@ -1,4 +1,9 @@
 import Shape from "./index";
+
+const SHAPE = [
+  [0, 1, 0],
+  [1, 1, 1],
+];
 export class Grid {
   element: HTMLDivElement;
   rows: Row[] = new Array(20).fill(null);
@@ -38,15 +43,46 @@ export class Grid {
   }
 
   shiftBottom() {
-    // Clean last position
+    if (this.isColliding()) {
+      this.addShape(new Shape(SHAPE));
+    }
+    this.clearLastPosition();
+    this.shape.shiftBottom();
+    this.updateCeils();
+  }
+
+  shiftLeft() {
+    if (this.shape.start.col <= 0) return;
+    this.clearLastPosition();
+
+    this.shape.shiftLeft();
+    this.updateCeils();
+  }
+
+  shiftRight() {
+    if (this.shape.end.col >= this.COLS - 1) return;
+    this.clearLastPosition();
+    this.shape.shiftRight();
+    this.updateCeils();
+  }
+
+  isColliding() {
+    if (this.shape.end.row >= this.ROWS - 1) return true;
+    if (this.shape.end.row + 1 < this.ROWS)
+      for (let i = this.shape.start.col; i < this.shape.end.col + 1; i++) {
+        if (this.rows[this.shape.end.row + 1].ceils[i].active) return true;
+      }
+    return false;
+  }
+
+  private clearLastPosition() {
     for (let i = this.shape.start.row; i <= this.shape.end.row; i++) {
       for (let j = this.shape.start.col; j <= this.shape.end.col; j++) {
         const ceil = this.rows[i].ceils[j];
+        ceil.active = false;
         ceil.element.setAttribute("data-active", "false");
       }
     }
-    this.shape.shiftBottom();
-    this.updateCeils();
   }
 }
 
