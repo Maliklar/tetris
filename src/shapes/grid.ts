@@ -1,4 +1,4 @@
-import Shape from "./index";
+import Shape, { getShape } from "./index";
 
 const SHAPE = [
   [0, 1, 0],
@@ -36,6 +36,7 @@ export class Grid {
     for (let i = this.shape.start.row; i <= this.shape.end.row; i++) {
       for (let j = this.shape.start.col; j <= this.shape.end.col; j++) {
         const ceil = this.rows[i].ceils[j];
+        if (this.shape.getOnGrid(i, j) === -1) continue;
         ceil.active = this.shape.getOnGrid(i, j) === 1;
         ceil.element.setAttribute("data-active", ceil.active + "");
       }
@@ -44,7 +45,7 @@ export class Grid {
 
   shiftBottom() {
     if (this.isColliding()) {
-      this.addShape(new Shape(SHAPE));
+      this.addShape(new Shape(getShape()));
     }
     this.clearLastPosition();
     this.shape.shiftBottom();
@@ -70,9 +71,30 @@ export class Grid {
     if (this.shape.end.row >= this.ROWS - 1) return true;
     if (this.shape.end.row + 1 < this.ROWS)
       for (let i = this.shape.start.col; i < this.shape.end.col + 1; i++) {
-        if (this.rows[this.shape.end.row + 1].ceils[i].active) return true;
+        if (this.rows[this.shape.end.row].ceils[i].active) {
+          if (this.rows[this.shape.end.row + 1].ceils[i].active) return true;
+        }
       }
+
+    for (let i = this.shape.start.row; i < this.shape.end.row + 1; i++) {
+      for (let j = this.shape.start.col; j < this.shape.end.col + 1; j++) {
+        if (this.checkBelow(i, j)) {
+          return true;
+        }
+      }
+    }
     return false;
+  }
+
+  checkBelow(row: number, col: number) {
+    for (let i = row; i < this.shape.end.row + 1; i++) {
+      if (this.shape.getOnGrid(i, col) === -1)
+        return this.rows[i].ceils[col].active;
+      else if (i === this.shape.end.row) {
+        // this.rows[i + 1].ceils[col].active;
+        return this.rows[i + 1].ceils[col].active;
+      }
+    }
   }
 
   private clearLastPosition() {

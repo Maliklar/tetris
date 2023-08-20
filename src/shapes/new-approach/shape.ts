@@ -12,25 +12,31 @@ export default class Shape {
   start: Position;
   end: Position;
   size: Size;
+
+  lastPosition: {
+    start: Position;
+    end: Position;
+  };
   shape: Array<Array<number>>;
 
-  constructor(shape: Array<Array<number>>) {
-    this.shape = shape;
+  constructor() {
+    this.shape = getShape();
+
     this.size = {
-      rows: shape.length - 1,
-      cols: shape[0].length - 1,
+      rows: this.shape.length,
+      cols: this.shape[0].length,
     };
     this.start = {
       row: 0,
       col: 0,
     };
     this.end = {
-      row: shape.length - 1,
-      col: shape[0].length - 1,
+      row: this.shape.length,
+      col: this.shape[0].length,
     };
   }
 
-  getOnGrid(row: number, col: number) {
+  getByPosition(row: number, col: number) {
     return this.shape[row - this.start.row][col - this.start.col];
   }
 
@@ -51,10 +57,6 @@ export default class Shape {
 export function getShape() {
   const shapes = SHAPES[Math.floor(Math.random() * SHAPES.length)];
   return shapes[Math.floor(Math.random() * shapes.length)];
-  // return [
-  //   [1, 1, -1],
-  //   [-1, 1, 1],
-  // ];
 }
 export const SHAPES = [
   [[[1], [1], [1], [1]], [[1, 1, 1, 1]]],
