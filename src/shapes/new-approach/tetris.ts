@@ -34,14 +34,14 @@ export default class Tetris {
     return this;
   }
 
-  private shadow() {
+  private updateLastPosition() {
     const getLastPosition = (row: number, col: number) => {
       for (let i = row + 1; i < this.ROWS; i++) {
         if (this.rows[i].ceils[col].isActive()) {
           return i;
         }
         if (i === this.ROWS - 1) {
-          return i;
+          return i + 1;
         }
       }
     };
@@ -84,11 +84,51 @@ export default class Tetris {
     this.shape.lastPosition = lastPosition;
   }
 
+  private clearLastPosition() {
+    for (let i = this.shape.start.row; i <= this.shape.end.row; i++) {
+      for (let j = this.shape.start.col; j <= this.shape.end.col; j++) {
+        const ceil = this.rows[i].ceils[j];
+        ceil.active = false;
+        ceil.e.setAttribute("data-active", "false");
+      }
+    }
+  }
+
+  public right() {
+    if (this.shape.end.col >= this.COLS) return;
+    else if (this.shape.end.col < this.COLS - 1)
+      for (let i = this.shape.start.row; i < this.shape.end.row; i++) {
+        if (this.rows[i].ceils[this.shape.end.col + 1].isActive()) return;
+      }
+    this.clearLastPosition();
+    this.shape.start.col++;
+    this.shape.end.col++;
+    this.update();
+    this.updateLastPosition();
+  }
+  public left() {
+    if (this.shape.start.col <= 0) return;
+    else if (this.shape.start.col > 1)
+      for (let i = this.shape.start.row; i < this.shape.end.row; i++) {
+        if (this.rows[i].ceils[this.shape.start.col - 1].isActive()) return;
+      }
+
+    this.clearLastPosition();
+    this.shape.start.col--;
+    this.shape.end.col--;
+    this.update();
+    this.updateLastPosition();
+  }
+
   public start() {
     this.addShape().update();
-    this.shadow();
+    this.updateLastPosition();
 
     const ii = setInterval(() => {
+      if (this.shape.start.row === this.shape.lastPosition.start.row) {
+        this.addShape();
+        this.updateLastPosition();
+      }
       for (let i = this.shape.start.row; i < this.shape.end.row; i++) {
         for (let j = this.shape.start.col; j < this.shape.end.col; j++) {
           if (this.shape.getByPosition(i, j) === 1)
@@ -98,10 +138,8 @@ export default class Tetris {
       this.shape.start.row++;
       this.shape.end.row++;
 
-      if (this.shape.start.row === this.shape.lastPosition.start.row)
-        clearInterval(ii);
       this.update();
-    }, 400);
+    }, 200);
   }
 }
 
@@ -120,12 +158,6 @@ export class Ceil {
   e: HTMLDivElement = document.createElement("div");
   active = false;
   constructor(row: number, col: number) {
-    // for testing
-    if (row === 8 && col === 0) {
-      this.active = true;
-      this.e.setAttribute("data-active", "true");
-      this.e.style.background = "gray";
-    }
     this.e.setAttribute("class", "ceil");
     this.e.setAttribute("id", `${row}-${col}`);
   }

@@ -20,24 +20,17 @@ import "../styles.css";
 // // grid.updateCeils();
 // // grid.shape.shiftBottom();
 
-// function start() {
-//   addEventListener("keydown", (e) => {
-//     if (e.key === "ArrowRight") {
-//       grid.shiftRight();
-//     }
-//     if (e.key === "ArrowLeft") {
-//       grid.shiftLeft();
-//     }
-//   });
-//   setInterval(() => {
-//     grid.shiftBottom();
-//   }, 100);
-// }
-
-// start();
-
 import Tetris from "./shapes/new-approach/tetris";
 
 const tetris = new Tetris();
 
 tetris.start();
+
+addEventListener("keydown", (e) => {
+  if (e.key === "ArrowRight") {
+    tetris.right();
+  }
+  if (e.key === "ArrowLeft") {
+    tetris.left();
+  }
+});
